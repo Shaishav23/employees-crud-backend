@@ -1,19 +1,43 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const employeeRoutes = require("./routes/employees");
 const cors = require("cors");
+const employeeRoutes = require("./routes/employees");
+const authRoutes = require("./routes/authRoutes");
+const session = require("express-session");
+const passport = require("passport");
+require("./passportStrategy/passportConfig");
+
 const app = express();
 
 app.use(cors());
+app.use(express.json());
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
 
-app.use(express.json());
+//Routes
 app.use("/api/employees", employeeRoutes);
+app.use("/api/auth", authRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
 
 mongoose
   .connect(process.env.MONGO_URI)
