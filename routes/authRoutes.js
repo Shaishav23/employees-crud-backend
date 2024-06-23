@@ -3,6 +3,14 @@ const passport = require("passport");
 
 const router = express.Router();
 
+router.get("/checkAuth", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ user: req.user });
+  } else {
+    res.status(401).json({ user: null });
+  }
+});
+
 router.post(
   "/signup",
   passport.authenticate("local-signup", {
