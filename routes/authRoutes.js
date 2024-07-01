@@ -11,23 +11,13 @@ router.get("/checkAuth", (req, res) => {
   }
 });
 
-router.post(
-  "/signup",
-  passport.authenticate("local-signup", {
-    successRedirect: "/",
-    failureRedirect: "/signup",
-    failureFlash: true,
-  })
-);
+router.post("/signup", passport.authenticate("local-signup"), (req, res) => {
+  res.status(201).json({ message: "Signup successful" });
+});
 
-router.post(
-  "/login",
-  passport.authenticate("local-login", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true,
-  })
-);
+router.post("/login", passport.authenticate("local-login"), (req, res) => {
+  res.status(200).json({ message: "Login successful" });
+});
 
 router.get("/logout", (req, res, next) => {
   req.logout((err) => {
