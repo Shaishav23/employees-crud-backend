@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const cors = require("cors");
 const employeeRoutes = require("./routes/employees");
 const authRoutes = require("./routes/authRoutes");
@@ -14,12 +15,11 @@ app.use(cors());
 app.use(express.json());
 
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
+  bodyParser.urlencoded({
+    extended: false,
   })
 );
+app.use(bodyParser.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
