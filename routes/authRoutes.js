@@ -7,7 +7,6 @@ require("dotenv").config();
 const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 const User = require("../models/userModel");
-const { expires } = require("mongoose/lib/utils");
 
 // @route POST api/users/register
 // @desc Register user
